@@ -63,6 +63,9 @@ class BalloonConfig(Config):
 
     # We use a GPU with 12GB memory, which can fit two images.
     # Adjust down if you use a smaller GPU.
+
+    #this is my testing.
+
     IMAGES_PER_GPU = 2
 
     # Number of classes (including background)
