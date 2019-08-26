@@ -63,9 +63,6 @@ class BalloonConfig(Config):
 
     # We use a GPU with 12GB memory, which can fit two images.
     # Adjust down if you use a smaller GPU.
-
-    #this is my testing.
-
     IMAGES_PER_GPU = 2
 
     # Number of classes (including background)
@@ -90,7 +87,15 @@ class BalloonDataset(utils.Dataset):
         subset: Subset to load: train or val
         """
         # Add classes. We have only one class to add.
-        self.add_class("balloon", 1, "balloon")
+        self.add_class("dog",1,"act")
+        self.add_class("dog",2,"nsw")
+        self.add_class("dog",3,"nt")
+        self.add_class("dog",4,"nz")
+        self.add_class("dog",5,"qld")
+        self.add_class("dog",6,"sa")
+        self.add_class("dog",7,"tas")
+        self.add_class("dog",8,"vic")
+        self.add_class("dog",9,"wa")
 
         # Train or validation dataset?
         assert subset in ["train", "val"]
