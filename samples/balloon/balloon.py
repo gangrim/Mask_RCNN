@@ -45,6 +45,8 @@ from mrcnn import model as modellib, utils
 # Path to trained weights file
 COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 
+CLASS_NAMES={1:"act",2:"nsw",3:"nt",4:"nz",5:"qld",6:"sa",7:"tas",8:"vic",9:"wa"}
+
 # Directory to save logs and model checkpoints, if not provided
 # through the command line argument --logs
 DEFAULT_LOGS_DIR = os.path.join(ROOT_DIR, "logs")
@@ -66,7 +68,7 @@ class BalloonConfig(Config):
     IMAGES_PER_GPU = 2
 
     # Number of classes (including background)
-    NUM_CLASSES = 1 + 1  # Background + balloon
+    NUM_CLASSES = 1 + len(CLASS_NAMES) # Background + dog
 
     # Number of training steps per epoch
     STEPS_PER_EPOCH = 100
@@ -87,15 +89,8 @@ class BalloonDataset(utils.Dataset):
         subset: Subset to load: train or val
         """
         # Add classes. We have only one class to add.
-        self.add_class("dog",1,"act")
-        self.add_class("dog",2,"nsw")
-        self.add_class("dog",3,"nt")
-        self.add_class("dog",4,"nz")
-        self.add_class("dog",5,"qld")
-        self.add_class("dog",6,"sa")
-        self.add_class("dog",7,"tas")
-        self.add_class("dog",8,"vic")
-        self.add_class("dog",9,"wa")
+        for key,label in CLASS_NAMES.items() :
+            self.add_class("dog",key,label) 
 
         # Train or validation dataset?
         assert subset in ["train", "val"]
@@ -130,10 +125,8 @@ class BalloonDataset(utils.Dataset):
             # the outline of each object instance. These are stores in the
             # shape_attributes (see json format above)
             # The if condition is needed to support VIA versions 1.x and 2.x.
-            if type(a['regions']) is dict:
-                polygons = [r['shape_attributes'] for r in a['regions'].values()]
-            else:
-                polygons = [r['shape_attributes'] for r in a['regions']] 
+
+            annots=a['regions']
 
             # load_mask() needs the image size to convert polygons to masks.
             # Unfortunately, VIA doesn't include it in JSON, so we must read
@@ -147,7 +140,7 @@ class BalloonDataset(utils.Dataset):
                 image_id=a['filename'],  # use file name as a unique image id
                 path=image_path,
                 width=width, height=height,
-                polygons=polygons)
+                annots=annots)            
 
     def load_mask(self, image_id):
         """Generate instance masks for an image.
@@ -164,16 +157,32 @@ class BalloonDataset(utils.Dataset):
         # Convert polygons to a bitmap mask of shape
         # [height, width, instance_count]
         info = self.image_info[image_id]
-        mask = np.zeros([info["height"], info["width"], len(info["polygons"])],
-                        dtype=np.uint8)
-        for i, p in enumerate(info["polygons"]):
-            # Get indexes of pixels inside the polygon and set them to 1
-            rr, cc = skimage.draw.polygon(p['all_points_y'], p['all_points_x'])
-            mask[rr, cc, i] = 1
-
-        # Return mask, and array of class IDs of each instance. Since we have
-        # one class ID only, we return an array of 1s
-        return mask.astype(np.bool), np.ones([mask.shape[-1]], dtype=np.int32)
+        instance_masks = []
+        class_ids = []
+        annotats=info["annots"]
+        for annotation in annotats:
+            class_id=0
+            label=annotation["region_attributes"]["type"]
+            for key,value in CLASS_NAMES.items():
+                if value == label:
+                    class_id=key
+                    break
+            if class_id:
+                m = np.zeros([info["height"], info["width"], len(annotation["shape_attributes"])],
+                    dtype=np.uint8)
+                for i, p in enumerate(annotation["shape_attributes"]):
+                    # Get indexes of pixels inside the polygon and set them to 1
+                    rr, cc = skimage.draw.polygon(p['all_points_y'], p['all_points_x'])
+                    m[rr, cc, i] = 1
+                instance_masks.append(m)
+                class_ids.append(class_id)
+        if class_ids:
+            mask = np.stack(instance_masks, axis=2).astype(np.bool)
+            class_ids = np.array(class_ids, dtype=np.int32)
+            return mask, class_ids
+        else:
+            # Call super class to return an empty mask
+            return super(self.__class__, self).load_mask(image_id)
 
     def image_reference(self, image_id):
         """Return the path of the image."""
