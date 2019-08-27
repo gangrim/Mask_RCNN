@@ -166,16 +166,16 @@ class BalloonDataset(utils.Dataset):
         print("annotation: {}".format(annotats))
         for annotation in annotats:
             class_id=0
-            label=annotation["region_attributes"]["type"]
+            label=annotation['region_attributes']['type']
             for key,value in CLASS_NAMES.items():
                 if value == label:
                     class_id=key
                     break
-            print("class_id {}:".format(class_id))
+            print("class_id :{}".format(class_id))
             if class_id:
-                m = np.zeros([info["height"], info["width"], len(annotation["shape_attributes"])],
+                m = np.zeros([info["height"], info["width"], len(annotation['shape_attributes'])],
                     dtype=np.uint8)
-                for i, p in enumerate(annotation["shape_attributes"]):
+                for i, p in enumerate(annotation['shape_attributes']):
                     # Get indexes of pixels inside the polygon and set them to 1
                     rr, cc = skimage.draw.polygon(p['all_points_y'], p['all_points_x'])
                     m[rr, cc, i] = 1
