@@ -166,7 +166,7 @@ class BalloonDataset(utils.Dataset):
         print("annotation: {}".format(annotats))
         for annotation in annotats:
             class_id=0
-            print("annotation:{}".format(annotation))
+            print("anno:{}".format(annotation['region_attributes']))
             label=annotation['region_attributes']['type']
             print("label :{}".format(label))
             for key,value in CLASS_NAMES.items():
