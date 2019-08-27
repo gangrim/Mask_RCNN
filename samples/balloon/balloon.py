@@ -33,6 +33,8 @@ import json
 import datetime
 import numpy as np
 import skimage.draw
+import warnings
+import logging
 
 # Root directory of the project
 ROOT_DIR = os.path.abspath("../../")
@@ -152,6 +154,7 @@ class BalloonDataset(utils.Dataset):
         # If not a balloon dataset image, delegate to parent class.
         image_info = self.image_info[image_id]
         if image_info["source"] != "balloon":
+            logging.warning("source error")
             return super(self.__class__, self).load_mask(image_id)
 
         # Convert polygons to a bitmap mask of shape
@@ -160,6 +163,7 @@ class BalloonDataset(utils.Dataset):
         instance_masks = []
         class_ids = []
         annotats=info["annots"]
+        print(annotats)
         for annotation in annotats:
             class_id=0
             label=annotation["region_attributes"]["type"]
@@ -167,6 +171,7 @@ class BalloonDataset(utils.Dataset):
                 if value == label:
                     class_id=key
                     break
+            print(class_id)
             if class_id:
                 m = np.zeros([info["height"], info["width"], len(annotation["shape_attributes"])],
                     dtype=np.uint8)
