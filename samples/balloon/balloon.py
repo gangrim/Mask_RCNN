@@ -166,20 +166,26 @@ class BalloonDataset(utils.Dataset):
         print("annotation: {}".format(annotats))
         for annotation in annotats:
             class_id=0
-            print("anno:{}".format(annotation['region_attributes']))
+            # print("anno:{}".format(annotation['region_attributes']))
             label=annotation['region_attributes']['type']
-            print("label :{}".format(label))
+            shape=annotation['shape_attributes']
+            # print("label :{}".format(label))
             for key,value in CLASS_NAMES.items():
-                print("class :{}".format(value))
+                # print("class :{}".format(value))
                 if value == label:
                     class_id=key
             print("class_id :{}".format(class_id))
             if class_id:
-                m = np.zeros([info["height"], info["width"], len(annotation['shape_attributes'])],
+                m = np.zeros([info["height"], info["width"], len(shape)],
                     dtype=np.uint8)
-                for i, p in enumerate(annotation['shape_attributes']):
+                print("shape_attributes:{}".format(shape))
+                for i, p in enumerate(shape):
                     # Get indexes of pixels inside the polygon and set them to 1
-                    rr, cc = skimage.draw.polygon(p['all_points_y'], p['all_points_x'])
+                    yarea=p['all_points_y']
+                    xarea=p['all_points_x']
+                    print("yarea:{}".format(yarea))
+                    print("xarea:{}".format(xarea))
+                    rr, cc = skimage.draw.polygon(yarea, xarea)
                     m[rr, cc, i] = 1
                 instance_masks.append(m)
                 class_ids.append(class_id)
