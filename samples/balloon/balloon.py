@@ -47,7 +47,7 @@ from mrcnn import model as modellib, utils
 # Path to trained weights file
 COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 
-CLASS_NAMES={1:"act",2:"nsw",3:"nt",4:"nz",5:"qld",6:"sa",7:"tas",8:"vic",9:"wa"}
+CLASS_NAMES={1:'act',2:'nsw',3:'nt',4:'nz',5:'qld',6:'sa',7:'tas',8:'vic',9:'wa'}
 
 # Directory to save logs and model checkpoints, if not provided
 # through the command line argument --logs
@@ -167,10 +167,11 @@ class BalloonDataset(utils.Dataset):
         for annotation in annotats:
             class_id=0
             label=annotation['region_attributes']['type']
+            print("label :{}".format(label))
             for key,value in CLASS_NAMES.items():
-                if value == label:
+                print("class :{}".format(value))
+                if str(value).lower() == str(label).lower:
                     class_id=key
-                    break
             print("class_id :{}".format(class_id))
             if class_id:
                 m = np.zeros([info["height"], info["width"], len(annotation['shape_attributes'])],
