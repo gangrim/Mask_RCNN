@@ -163,7 +163,7 @@ class BalloonDataset(utils.Dataset):
         instance_masks = []
         class_ids = []
         annotats=info["annots"]
-        print(annotats)
+        print("annotation: {}".format(annotats))
         for annotation in annotats:
             class_id=0
             label=annotation["region_attributes"]["type"]
@@ -171,7 +171,7 @@ class BalloonDataset(utils.Dataset):
                 if value == label:
                     class_id=key
                     break
-            print(class_id)
+            print("class_id {}:".format(class_id))
             if class_id:
                 m = np.zeros([info["height"], info["width"], len(annotation["shape_attributes"])],
                     dtype=np.uint8)
@@ -186,6 +186,7 @@ class BalloonDataset(utils.Dataset):
             class_ids = np.array(class_ids, dtype=np.int32)
             return mask, class_ids
         else:
+            logging.warning("jsonroad error")
             # Call super class to return an empty mask
             return super(self.__class__, self).load_mask(image_id)
 
