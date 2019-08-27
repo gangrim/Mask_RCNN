@@ -171,7 +171,7 @@ class BalloonDataset(utils.Dataset):
             print("label :{}".format(label))
             for key,value in CLASS_NAMES.items():
                 print("class :{}".format(value))
-                if str(value).lower() == str(label).lower:
+                if value == label:
                     class_id=key
             print("class_id :{}".format(class_id))
             if class_id:
