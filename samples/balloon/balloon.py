@@ -178,15 +178,15 @@ class BalloonDataset(utils.Dataset):
             if class_id:
                 m = np.zeros([info["height"], info["width"], len(shape)],
                     dtype=np.uint8)
-                print("shape_attributes:{}".format(shape))
-                for i, p in enumerate(shape):
+                print("shape_attributes:{}".format(len(shape)))
+                # for i, p in enumerate(shape):
                     # Get indexes of pixels inside the polygon and set them to 1
-                    yarea=p['all_points_y']
-                    xarea=p['all_points_x']
-                    print("yarea:{}".format(yarea))
-                    print("xarea:{}".format(xarea))
-                    rr, cc = skimage.draw.polygon(yarea, xarea)
-                    m[rr, cc, i] = 1
+                yarea=shape['all_points_y']
+                xarea=shape['all_points_x']
+                print("yarea:{}".format(yarea))
+                print("xarea:{}".format(xarea))
+                rr, cc = skimage.draw.polygon(yarea, xarea)
+                m[rr, cc, 1] = 1
                 instance_masks.append(m)
                 class_ids.append(class_id)
         if class_ids:
