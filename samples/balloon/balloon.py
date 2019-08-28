@@ -175,7 +175,7 @@ class BalloonDataset(utils.Dataset):
                     class_id=key
             print("class_id :{}".format(class_id))
             if class_id:
-                m = np.zeros([info["height"], info["width"], len(annotats)],
+                m = np.zeros([info["height"], info["width"]],#, len(annotats)
                     dtype=np.uint8)
 
                 print("np:{}".format(m))
@@ -186,7 +186,7 @@ class BalloonDataset(utils.Dataset):
                 print("yarea:{}".format(yarea))
                 print("xarea:{}".format(xarea))
                 rr, cc = skimage.draw.polygon(yarea, xarea)
-                m[rr, cc, count] = 1
+                m[rr, cc] = 1#, count
                 instance_masks.append(m)
                 class_ids.append(class_id)
         if class_ids:
