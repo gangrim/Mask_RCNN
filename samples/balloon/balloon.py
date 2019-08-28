@@ -177,7 +177,8 @@ class BalloonDataset(utils.Dataset):
             if class_id:
                 m = np.zeros([info["height"], info["width"], len(annotats)],
                     dtype=np.uint8)
-                print("shape_attributes:{}".format(len(shape)))
+
+                print("np:{}".format(m))
                 # for i, p in enumerate(shape):
                     # Get indexes of pixels inside the polygon and set them to 1
                 yarea=shape['all_points_y']
