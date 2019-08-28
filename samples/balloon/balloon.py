@@ -119,7 +119,7 @@ class BalloonDataset(utils.Dataset):
 
         # The VIA tool saves images in the JSON even if they don't have any
         # annotations. Skip unannotated images.
-        annotations = [a for a in annotations if a['regions']]
+        # annotations = [a for a in annotations if a['regions']]
 
         # Add images
         for a in annotations:
@@ -127,8 +127,8 @@ class BalloonDataset(utils.Dataset):
             # the outline of each object instance. These are stores in the
             # shape_attributes (see json format above)
             # The if condition is needed to support VIA versions 1.x and 2.x.
-
-            annots=a['regions']
+            annots=[a for a in annotations if a['regions']]
+            # a['regions']
 
             # load_mask() needs the image size to convert polygons to masks.
             # Unfortunately, VIA doesn't include it in JSON, so we must read
@@ -164,7 +164,7 @@ class BalloonDataset(utils.Dataset):
         class_ids = []
         annotats=info["annots"]
         print("annotation: {}".format(annotats))
-        for annotation in annotats:
+        for count,annotation in enumerate(annotats,1):
             class_id=0
             # print("anno:{}".format(annotation['region_attributes']))
             label=annotation['region_attributes']['type']
@@ -176,7 +176,7 @@ class BalloonDataset(utils.Dataset):
                     class_id=key
             print("class_id :{}".format(class_id))
             if class_id:
-                m = np.zeros([info["height"], info["width"], len(shape)],
+                m = np.zeros([info["height"], info["width"], count],
                     dtype=np.uint8)
                 print("shape_attributes:{}".format(len(shape)))
                 # for i, p in enumerate(shape):
@@ -186,7 +186,7 @@ class BalloonDataset(utils.Dataset):
                 print("yarea:{}".format(yarea))
                 print("xarea:{}".format(xarea))
                 rr, cc = skimage.draw.polygon(yarea, xarea)
-                m[rr, cc, 1] = 1
+                m[rr, cc, count] = 1
                 instance_masks.append(m)
                 class_ids.append(class_id)
         if class_ids:
