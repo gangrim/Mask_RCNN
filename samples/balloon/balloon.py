@@ -175,7 +175,7 @@ class BalloonDataset(utils.Dataset):
                     class_id=key
             print("class_id :{}".format(class_id))
             if class_id:
-                m = np.zeros([info["height"], info["width"], count],
+                m = np.zeros([info["height"], info["width"], len(annotats)],
                     dtype=np.uint8)
                 print("shape_attributes:{}".format(len(shape)))
                 # for i, p in enumerate(shape):
