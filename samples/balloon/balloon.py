@@ -162,7 +162,7 @@ class BalloonDataset(utils.Dataset):
         instance_masks = []
         class_ids = []
         annotats=info["annots"]
-        print("annotation: {}".format(annotats))
+        # print("annotation: {}".format(annotats))
         for count,annotation in enumerate(annotats,1):
             class_id=0
             # print("anno:{}".format(annotation['region_attributes']))
@@ -173,18 +173,18 @@ class BalloonDataset(utils.Dataset):
                 # print("class :{}".format(value))
                 if value == label:
                     class_id=key
-            print("class_id :{}".format(class_id))
+            # print("class_id :{}".format(class_id))
             if class_id:
                 m = np.zeros([info["height"], info["width"]],#, len(annotats)
                     dtype=np.uint8)
 
-                print("np:{}".format(m))
+                # print("np:{}".format(m))
                 # for i, p in enumerate(shape):
                     # Get indexes of pixels inside the polygon and set them to 1
                 yarea=shape['all_points_y']
                 xarea=shape['all_points_x']
-                print("yarea:{}".format(yarea))
-                print("xarea:{}".format(xarea))
+                # print("yarea:{}".format(yarea))
+                # print("xarea:{}".format(xarea))
                 rr, cc = skimage.draw.polygon(yarea, xarea)
                 m[rr, cc] = 1#, count
                 instance_masks.append(m)
