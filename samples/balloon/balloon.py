@@ -70,7 +70,7 @@ class BalloonConfig(Config):
 
     # We use a GPU with 12GB memory, which can fit two images.
     # Adjust down if you use a smaller GPU.
-    IMAGES_PER_GPU = 4
+    IMAGES_PER_GPU = 2
 
     # RPN_ANCHOR_SCALES = (8, 16, 32, 64, 128)
     # TRAIN_ROIS_PER_IMAGE = 32
