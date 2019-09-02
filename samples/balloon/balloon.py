@@ -47,7 +47,10 @@ from mrcnn import model as modellib, utils
 # Path to trained weights file
 COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
 
-CLASS_NAMES={1:'act',2:'nsw',3:'nt',4:'nz',5:'qld',6:'sa',7:'tas',8:'vic',9:'wa'}
+CLASS_NAMES={1:'a',2:'b',3:'c',4:'d',5:'e',6:'f',7:'g',8:'h',9:'i',10:'j',11:'k',12:'l',13:'m',14:'n',15:'o',16:'p',17:'q',18:'r',19:'s',
+            20:'t',21:'u',22:'v',23:'w',24:'x',25:'y',26:'z',27:'a1',28:'b1',29:'c1',30:'d1',31:'e1',32:'f1',33:'g1',34:'h1',35:'i1',36:'j1',37:'k1',
+            38:'l1',39:'m1',40:'n1',41:'o1',42:'p1',43:'q1',44:'r1',45:'s1',46:'t1',47:'u1',48:'v1',49:'w1',50:'x1',51:'y1',52:'z1',53:'0',54:'1',55:'2',
+            56:'3',57:'4',58:'5',59:'6',60:'7',61:'8',62:'9'}
 
 # Directory to save logs and model checkpoints, if not provided
 # through the command line argument --logs
@@ -67,7 +70,10 @@ class BalloonConfig(Config):
 
     # We use a GPU with 12GB memory, which can fit two images.
     # Adjust down if you use a smaller GPU.
-    IMAGES_PER_GPU = 2
+    IMAGES_PER_GPU = 10
+
+    RPN_ANCHOR_SCALES = (8, 16, 32, 64, 128)
+    TRAIN_ROIS_PER_IMAGE = 32
 
     # Number of classes (including background)
     NUM_CLASSES = 1 + len(CLASS_NAMES) # Background + dog
@@ -181,12 +187,13 @@ class BalloonDataset(utils.Dataset):
                 # print("np:{}".format(m))
                 # for i, p in enumerate(shape):
                     # Get indexes of pixels inside the polygon and set them to 1
-                yarea=shape['all_points_y']
-                xarea=shape['all_points_x']
+                firsty=shape['y']
+                firstx=shape['x']
+                width=shape['width']
+                height=shape['height']
                 # print("yarea:{}".format(yarea))
                 # print("xarea:{}".format(xarea))
-                rr, cc = skimage.draw.polygon(yarea, xarea)
-                m[rr, cc] = 1#, count
+                m[firsty:firsty+height,firstx:firstx+width]=1
                 instance_masks.append(m)
                 class_ids.append(class_id)
         if class_ids:
