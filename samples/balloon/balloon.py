@@ -72,6 +72,8 @@ class BalloonConfig(Config):
     # Adjust down if you use a smaller GPU.
     IMAGES_PER_GPU = 2
 
+    GPU_COUNT = 2
+
     # RPN_ANCHOR_SCALES = (8, 16, 32, 64, 128)
     # TRAIN_ROIS_PER_IMAGE = 32
 
