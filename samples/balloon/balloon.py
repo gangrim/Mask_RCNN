@@ -230,7 +230,7 @@ def train(model):
                 layers='heads')
 
 
-def color_splsash(image, mask):
+def color_splash(image, mask):
     """Apply color splash effect.
     image: RGB image [height, width, 3]
     mask: instance segmentation mask [height, width, instance count]
