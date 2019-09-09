@@ -61,7 +61,7 @@ class Config(object):
 
     # The strides of each layer of the FPN Pyramid. These values
     # are based on a Resnet101 backbone.
-    BACKBONE_STRIDES = [4, 8, 16, 32, 64]
+    BACKBONE_STRIDES = [4, 8]
 
     # Size of the fully-connected layers in the classification graph
     FPN_CLASSIF_FC_LAYERS_SIZE = 1024
