@@ -46,11 +46,10 @@ from mrcnn import model as modellib, utils
 
 # Path to trained weights file
 COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
-
-CLASS_NAMES={1:'a',2:'b',3:'c',4:'d',5:'e',6:'f',7:'g',8:'h',9:'i',10:'j',11:'k',12:'l',13:'m',14:'n',15:'o',16:'p',17:'q',18:'r',19:'s',
-            20:'t',21:'u',22:'v',23:'w',24:'x',25:'y',26:'z',27:'a1',28:'b1',29:'c1',30:'d1',31:'e1',32:'f1',33:'g1',34:'h1',35:'i1',36:'j1',37:'k1',
-            38:'l1',39:'m1',40:'n1',41:'o1',42:'p1',43:'q1',44:'r1',45:'s1',46:'t1',47:'u1',48:'v1',49:'w1',50:'x1',51:'y1',52:'z1',53:'10',54:'1',55:'2',
-            56:'3',57:'4',58:'5',59:'6',60:'7',61:'8',62:'9',63:'slash'}
+CLASS_NAMES={1:'act',2:'act1',3:'act2',4:'act3',5:'nsw',6:'nsw1',7:'nsw2',8:'nsw3',9:'nt',10:'nt1',11:'nz1',12:'nz2',13:'nz3',\
+           14:'qld',15:'qld1',16:'sa',17:'sa1',18:'sa2',19:'sa3',20:'tas',21:'tas_00',22:'tas_01',23:'tas1',24:'tas2',25:'tas3',\
+           26:'vic',27:'vic_0',28:'vic1',29:'vic_1',30:'vic2',31:'vic_2',32:'vic3',33:'wa',34:'wa_00',35:'wa_01',36:'wa1',37:'wa_1',\
+           38:'wa2',39:'wa_2'}
 
 # Directory to save logs and model checkpoints, if not provided
 # through the command line argument --logs
@@ -181,16 +180,20 @@ class BalloonDataset(utils.Dataset):
                 m = np.zeros([info["height"], info["width"]],#, len(annotats)
                     dtype=np.uint8)
 
-                # print("np:{}".format(m))
-                # for i, p in enumerate(shape):
-                    # Get indexes of pixels inside the polygon and set them to 1
-                firsty=shape['y']
-                firstx=shape['x']
-                width=shape['width']
-                height=shape['height']
-                # print("yarea:{}".format(yarea))
-                # print("xarea:{}".format(xarea))
-                m[firsty:firsty+height,firstx:firstx+width]=1
+                # # print("np:{}".format(m))
+                # # for i, p in enumerate(shape):
+                #     # Get indexes of pixels inside the polygon and set them to 1
+                # firsty=shape['y']
+                # firstx=shape['x']
+                # width=shape['width']
+                # height=shape['height']
+                # # print("yarea:{}".format(yarea))
+                # # print("xarea:{}".format(xarea))
+                # m[firsty:firsty+height,firstx:firstx+width]=1
+                yarea=shape['all_points_y']
+                xarea=shape['all_points_x']
+                rr, cc = skimage.draw.polygon(yarea, xarea)
+                m[rr, cc] = 1#, count
                 instance_masks.append(m)
                 class_ids.append(class_id)
         if class_ids:
