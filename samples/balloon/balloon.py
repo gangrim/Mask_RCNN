@@ -45,7 +45,7 @@ from mrcnn.config import Config
 from mrcnn import model as modellib, utils
 
 # Path to trained weights file
-COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
+COCO_WEIGHTS_PATH = os.path.join(ROOT_DIR, "mask_rcnn_card_0043.h5")#"mask_rcnn_coco.h5"
 CLASS_NAMES={1:'act',2:'act1',3:'act2',4:'act3',5:'nsw',6:'nsw1',7:'nsw2',8:'nsw3',9:'nt',10:'nt1',11:'nz1',12:'nz2',13:'nz3',\
            14:'qld',15:'qld1',16:'sa',17:'sa1',18:'sa2',19:'sa3',20:'tas',21:'tas_00',22:'tas_01',23:'tas1',24:'tas2',25:'tas3',\
            26:'vic',27:'vic_0',28:'vic1',29:'vic_1',30:'vic2',31:'vic_2',32:'vic3',33:'wa',34:'wa_00',35:'wa_01',36:'wa1',37:'wa_1',\
